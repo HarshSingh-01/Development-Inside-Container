@@ -1,0 +1,36 @@
+FROM python:3.12
+
+# To see the image preparation logs
+ENV PYTHONUNBUFFERED=1
+
+# Making Debian Frontend non-interactive
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+# Setting Timezone to Asia/Kolkata
+ENV TZ=Asia/Kolkata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update \
+ && apt-get install -y sudo
+
+ # User
+ENV USER=harsh
+
+# Create $USER user with sudo privileges
+RUN useradd -ms /bin/bash $USER && \
+    usermod -aG sudo $USER
+# New added for disable sudo password
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Sudo user $USER
+USER $USER
+
+# setting working directory
+WORKDIR /home/$USER/fluent_python
+
+# Python Environment
+ENV PATH="/home/${USER}/.local/bin:${PATH}"
+
+# Requirements installation
+RUN pip3 install --upgrade pip
