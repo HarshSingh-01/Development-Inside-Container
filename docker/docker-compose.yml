@@ -1,0 +1,21 @@
+version: 'latest'
+
+services:
+  app:
+    image: python-nvidia-gpu:latest
+    container_name: python-gpu-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/home/harsh/project
+    command: nvidia-smi
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+
