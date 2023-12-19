@@ -1,0 +1,7 @@
+tensorflow
+torch
+torchvision
+torchaudio
+pandas
+seaborn
+plotly

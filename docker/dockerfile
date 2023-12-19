@@ -11,26 +11,29 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 ENV TZ=Asia/Kolkata
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update \
- && apt-get install -y sudo
+# RUN apt-get update \
+#  && apt-get install -y sudo
 
- # User
-ENV USER=harsh
+#  # User
+# ENV USER=harsh
 
-# Create $USER user with sudo privileges
-RUN useradd -ms /bin/bash $USER && \
-    usermod -aG sudo $USER
-# New added for disable sudo password
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# # Create $USER user with sudo privileges
+# RUN useradd -ms /bin/bash $USER && \
+#     usermod -aG sudo $USER
+# # New added for disable sudo password
+# RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Sudo user $USER
 USER $USER
 
 # setting working directory
-WORKDIR /home/$USER/fluent_python
+WORKDIR /home/$USER/project
+
+# Requirements
+COPY ./docker/requirements.txt /home/$USER/project/
 
 # Python Environment
 # ENV PATH="/home/${USER}/.local/bin:${PATH}"
 
 # Requirements installation
-RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
