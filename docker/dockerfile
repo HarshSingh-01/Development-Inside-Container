@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM tensorflow/tensorflow:latest-gpu as builder
 
 # To see the image preparation logs
 ENV PYTHONUNBUFFERED=1
@@ -30,7 +30,7 @@ USER $USER
 WORKDIR /home/$USER/fluent_python
 
 # Python Environment
-ENV PATH="/home/${USER}/.local/bin:${PATH}"
+# ENV PATH="/home/${USER}/.local/bin:${PATH}"
 
 # Requirements installation
 RUN pip3 install --upgrade pip
